@@ -250,6 +250,15 @@ class LLaVA_Next(BaseModel):
             self.processor = AutoProcessor.from_pretrained(self.model_path)
         else:
             self.processor = LlavaNextProcessor.from_pretrained(self.model_path)
+        
+        # Fix patch_size issue if it's None
+        if hasattr(self.processor, 'patch_size') and self.processor.patch_size is None:
+            # Set a default patch size based on the image processor
+            if hasattr(self.processor, 'image_processor') and hasattr(self.processor.image_processor, 'patch_size'):
+                self.processor.patch_size = self.processor.image_processor.patch_size
+            else:
+                # Default patch size for LLaVA models
+                self.processor.patch_size = 14
         flash_attn_flag = False
         try:
             import flash_attn
@@ -259,20 +268,35 @@ class LLaVA_Next(BaseModel):
             pass
 
         if flash_attn_flag:
-            if "interleave" in model_path.lower():
-                model = LlavaForConditionalGeneration.from_pretrained(
-                    self.model_path,
-                    torch_dtype=torch.float16,
-                    low_cpu_mem_usage=True,
-                    use_flash_attention_2=True,
-                )
-            else:
-                model = LlavaNextForConditionalGeneration.from_pretrained(
-                    self.model_path,
-                    torch_dtype=torch.float16,
-                    low_cpu_mem_usage=True,
-                    use_flash_attention_2=True,
-                )
+            try:
+                #original code
+                if "interleave" in model_path.lower():
+                    model = LlavaForConditionalGeneration.from_pretrained(
+                        self.model_path,
+                        torch_dtype=torch.float16,
+                        low_cpu_mem_usage=True,
+                        use_flash_attention_2=True,
+                    )
+                else:
+                    model = LlavaNextForConditionalGeneration.from_pretrained(
+                        self.model_path,
+                        torch_dtype=torch.float16,
+                        low_cpu_mem_usage=True,
+                        use_flash_attention_2=True,
+                    )
+                #end original code
+            except TypeError as e:
+                # Fallback if use_flash_attention_2 is not supported
+                # Silently fall back to loading without flash attention
+                if "interleave" in model_path.lower():
+                    model = LlavaForConditionalGeneration.from_pretrained(
+                        self.model_path, torch_dtype=torch.float16, low_cpu_mem_usage=True
+                    )
+                else:
+                    model = LlavaNextForConditionalGeneration.from_pretrained(
+                        self.model_path, torch_dtype=torch.float16, low_cpu_mem_usage=True
+                    )
+           
         else:
             if "interleave" in model_path.lower():
                 model = LlavaForConditionalGeneration.from_pretrained(
@@ -395,9 +419,26 @@ class LLaVA_Next(BaseModel):
         prompt = self.processor.apply_chat_template(
             conversation, add_generation_prompt=True
         )
-        inputs = self.processor(prompt, images, return_tensors="pt").to(
-            "cuda", torch.float16
-        )
+        
+        # Additional fix for patch_size issue during processing
+        try:
+            inputs = self.processor(prompt, images, return_tensors="pt").to(
+                "cuda", torch.float16
+            )
+        except TypeError as e:
+            if "patch_size" in str(e) and hasattr(self.processor, 'image_processor'):
+                # Try to fix patch_size on the image processor
+                if hasattr(self.processor.image_processor, 'patch_size') and self.processor.image_processor.patch_size is None:
+                    self.processor.image_processor.patch_size = 14
+                # Also fix on the main processor if it exists
+                if hasattr(self.processor, 'patch_size') and self.processor.patch_size is None:
+                    self.processor.patch_size = 14
+                # Retry the processing
+                inputs = self.processor(prompt, images, return_tensors="pt").to(
+                    "cuda", torch.float16
+                )
+            else:
+                raise e
         output = self.model.generate(**inputs, **self.kwargs)
         answer = self.processor.decode(output[0], skip_special_token=True)
         answer = self.output_process(answer)

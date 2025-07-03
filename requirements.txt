@@ -37,3 +37,5 @@ transformers
 typing_extensions
 validators
 xlsxwriter
+# LLaVA package for LLaVA series models
+git+https://github.com/haotian-liu/LLaVA.git

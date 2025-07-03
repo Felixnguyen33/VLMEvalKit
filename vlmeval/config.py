@@ -1452,7 +1452,46 @@ internvl_series = {}
 for group in internvl_groups:
     internvl_series.update(group)
 
-supported_VLM = {}
+supported_VLM = {
+    "Qwen2.5-VL-7B-Instruct-Pruned-sp": partial(
+        Qwen2VLChat,
+        model_path="/home/Chien.Duy@mbzuai.ac.ae/ugrip/gwen/GBLM-Pruner/out/qwen2_5_vl_7b_instruct/unstructured/sparsegpt",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-7B-Instruct-Pruned-gblm": partial(
+        Qwen2VLChat,
+        model_path="/home/Chien.Duy@mbzuai.ac.ae/ugrip/gwen/GBLM-Pruner/out/qwen2_5_vl_7b_instruct/unstructured/gblm",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-7B-Instruct-Pruned-wanda": partial(
+        Qwen2VLChat,
+        model_path="/home/Chien.Duy@mbzuai.ac.ae/ugrip/gwen/GBLM-Pruner/out/qwen2_5_vl_7b_instruct/unstructured/wanda",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "LLaVa1.5-VL-7B-Pruned": partial(
+        LLaVA,
+        model_path="/home/Chien.Duy@mbzuai.ac.ae/ugrip/gwen/GBLM-Pruner/out/llava_1_5_7b/unstructured/gblm"
+    ),
+    "llava_next_vicuna_7b-pruned": partial(
+        LLaVA_Next, 
+        model_path="/home/Chien.Duy@mbzuai.ac.ae/ugrip/gwen/GBLM-Pruner/out/llava_1_6_vicuna_7b/unstructured/sparsegpt"
+    ),
+    "llava_next_vicuna_7b-wanda": partial(
+        LLaVA_Next, 
+        model_path="/home/Chien.Duy@mbzuai.ac.ae/ugrip/gwen/GBLM-Pruner/out/llava_1_6_vicuna_7b/unstructured/wanda"
+    ),
+    "llava_next_vicuna_7b-gblm": partial(
+        LLaVA_Next, 
+        model_path="/home/Chien.Duy@mbzuai.ac.ae/ugrip/gwen/GBLM-Pruner/out/llava_1_6_vicuna_7b/unstructured/gblm"
+    ),
+    
+}
 
 model_groups = [
     ungrouped, o1_apis, api_models, xtuner_series, qwen_series, llava_series, granite_vision_series,
