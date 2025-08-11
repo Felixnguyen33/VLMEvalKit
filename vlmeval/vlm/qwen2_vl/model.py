@@ -6,6 +6,10 @@ import warnings
 import math
 import logging
 
+# Suppress transformers warnings
+warnings.filterwarnings("ignore", message=".*Using a slow image processor as `use_fast` is unset.*")
+warnings.filterwarnings("ignore", message=".*Video processor configs should be saved in their own.*")
+
 import torch
 from transformers import StoppingCriteria
 
@@ -230,15 +234,27 @@ class Qwen2VLChat(Qwen2VLPromptMixin, BaseModel):
                 logging.critical("pip install git+https://github.com/huggingface/transformers@3a1ead0aabed473eafe527915eea8c197d424356")  # noqa: E501
                 raise err
             MODEL_CLS = Qwen2_5OmniForConditionalGeneration
-            self.processor = Qwen2_5OmniProcessor.from_pretrained(model_path)
+            # Suppress video processor config deprecation warning
+            import warnings
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", message=".*Video processor configs should be saved in their own.*")
+                self.processor = Qwen2_5OmniProcessor.from_pretrained(model_path, use_fast=True)
         elif listinstr(['2.5', '2_5', 'qwen25', 'mimo'], model_path.lower()):
             from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
             MODEL_CLS = Qwen2_5_VLForConditionalGeneration
-            self.processor = AutoProcessor.from_pretrained(model_path)
+            # Suppress video processor config deprecation warning
+            import warnings
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", message=".*Video processor configs should be saved in their own.*")
+                self.processor = AutoProcessor.from_pretrained(model_path, use_fast=True)
         else:
             from transformers import Qwen2VLForConditionalGeneration, Qwen2VLProcessor
             MODEL_CLS = Qwen2VLForConditionalGeneration
-            self.processor = Qwen2VLProcessor.from_pretrained(model_path)
+            # Suppress video processor config deprecation warning
+            import warnings
+            with warnings.catch_warnings():
+                warnings.filterwarnings("ignore", message=".*Video processor configs should be saved in their own.*")
+                self.processor = Qwen2VLProcessor.from_pretrained(model_path, use_fast=True)
 
         gpu_mems = get_gpu_memory()
         max_gpu_mem = max(gpu_mems) if gpu_mems != [] else -1

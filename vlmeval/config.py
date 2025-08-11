@@ -1514,7 +1514,29 @@ internvl_series = {}
 for group in internvl_groups:
     internvl_series.update(group)
 
-supported_VLM = {}
+supported_VLM = {
+     "gwen2_5_vl_3b_gblm": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_3b_instruct/unstructured/gblm",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "gwen2_5_vl_3b_sp": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_3b_instruct/unstructured/sparsegpt",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "gwen2_5_vl_3b_wanda": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_3b_instruct/unstructured/wanda",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+}
 
 model_groups = [
     ungrouped, o1_apis, api_models, xtuner_series, qwen_series, llava_series, granite_vision_series,

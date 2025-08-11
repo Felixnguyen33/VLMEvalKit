@@ -61,12 +61,12 @@ class VLMR1Chat(Qwen2VLPromptMixin, BaseModel):
             from transformers import Qwen2_5_VLForConditionalGeneration, AutoProcessor
 
             MODEL_CLS = Qwen2_5_VLForConditionalGeneration
-            self.processor = AutoProcessor.from_pretrained(model_path)
+            self.processor = AutoProcessor.from_pretrained(model_path, use_fast=True)
         else:
             from transformers import Qwen2VLForConditionalGeneration, Qwen2VLProcessor
 
             MODEL_CLS = Qwen2VLForConditionalGeneration
-            self.processor = Qwen2VLProcessor.from_pretrained(model_path)
+            self.processor = Qwen2VLProcessor.from_pretrained(model_path, use_fast=True)
 
         print(f"now testing.....{self.model_path}")
         gpu_mems = get_gpu_memory()

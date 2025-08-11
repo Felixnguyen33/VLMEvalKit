@@ -267,12 +267,21 @@ class LLaVA_Next(BaseModel):
                     use_flash_attention_2=True,
                 )
             else:
-                model = LlavaNextForConditionalGeneration.from_pretrained(
-                    self.model_path,
-                    torch_dtype=torch.float16,
-                    low_cpu_mem_usage=True,
-                    use_flash_attention_2=True,
-                )
+                # Check if LlavaNextForConditionalGeneration supports use_flash_attention_2
+                try:
+                    model = LlavaNextForConditionalGeneration.from_pretrained(
+                        self.model_path,
+                        torch_dtype=torch.float16,
+                        low_cpu_mem_usage=True,
+                        use_flash_attention_2=True,
+                    )
+                except TypeError:
+                    # Fallback if use_flash_attention_2 is not supported
+                    model = LlavaNextForConditionalGeneration.from_pretrained(
+                        self.model_path,
+                        torch_dtype=torch.float16,
+                        low_cpu_mem_usage=True,
+                    )
         else:
             if "interleave" in model_path.lower():
                 model = LlavaForConditionalGeneration.from_pretrained(
