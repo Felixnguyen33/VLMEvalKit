@@ -1536,6 +1536,36 @@ supported_VLM = {
         max_pixels=16384 * 28 * 28,
         use_custom_prompt=False,
     ),
+    "gwen2_5_vl_7b_wanda": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/Gwen_2_5_VL_Instruct_7B_Wanda_Pruned",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "gwen2_5_vl_7b_gblm": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/Gwen_2_5_VL_Instruct_7b_GBLM_Pruned",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "gwen2_5_vl_7b_sp": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/GBLM-Pruner/gwen_vl_2_5_7b/unstructured/sparsegpt/",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "llava_next_vicuna_7b_gblm": partial(
+        LLaVA_Next, model_path="felixnguyen33/LLava_1_6_Vicuna_GBLM_Pruned"
+    ),
+    "llava_next_vicuna_7b_wanda": partial(
+        LLaVA_Next, model_path="felixnguyen33/Llava_1_5_7B_Vicuna_Pruned_Wanda"
+    ),
+    "llava_next_vicuna_7b_sp": partial(
+        LLaVA_Next, model_path="/home/chien/GBLM-Pruner/llava_vicuna_1_6_7b/unstructured/sparsegpt/"
+    ),
 }
 
 model_groups = [

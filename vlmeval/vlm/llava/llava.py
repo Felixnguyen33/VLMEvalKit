@@ -250,6 +250,10 @@ class LLaVA_Next(BaseModel):
             self.processor = AutoProcessor.from_pretrained(self.model_path)
         else:
             self.processor = LlavaNextProcessor.from_pretrained(self.model_path)
+
+        # Fix: Ensure patch_size is set to avoid TypeError in processor
+        if hasattr(self.processor, "patch_size") and self.processor.patch_size is None:
+            self.processor.patch_size = 14  # Set to 14 or the correct value for your model
         flash_attn_flag = False
         try:
             import flash_attn

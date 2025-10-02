@@ -33,7 +33,9 @@ def load_and_process_data(filepath):
             .str.replace(r'[>><<:.]', '', regex=True)
             .str.strip()
         )
-        df['processed_answer'] = df['processed_answer'].apply(lambda x: x[0] if x and x[0] in 'ABCDEFGH' else None)
+        df['processed_answer'] = df['processed_answer'].apply(
+            lambda x: x[0] if isinstance(x, (str, list)) and x and x[0] in 'ABCDEFGH' else None
+        )
         df['joker'] = df['processed_answer'] == df['answer']
     else:
         df['joker'] = df['hit'].astype(bool)
