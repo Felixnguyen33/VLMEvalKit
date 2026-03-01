@@ -1996,7 +1996,211 @@ interns1_series = {}
 for group in interns1_groups:
     interns1_series.update(group)
     
-supported_VLM = {}
+supported_VLM = {
+    "llava_1_5_7b_GPTQ-Int4": partial(
+        LLaVA_Next, model_path="/home/chien/Pruning/llm-compressor/examples/multimodal_vision/llava-1.5-7b-hf-W4A16-G128"
+    ),
+    "llava_v1_5_7b_base": partial(
+        LLaVA_Next, model_path="llava-hf/llava-1.5-7b-hf"),
+    
+     "llava_1_5_7b_wanda_50": partial(
+        LLaVA_Next, model_path="/home/chien/Pruning/GBLM-Pruner/out/llava_1_5_7b_hf/unstructured/wanda_50"
+    ),
+    "llava_1_5_7b_AWQ": partial(
+        LLaVA_Next, model_path="/home/chien/Pruning/llm-compressor/examples/multimodal_vision/llava-1.5-7b-hf-awq-w4a16-sym"
+    ),
+    "LLava_1_6_Vicuna_Wanda_Pruned": partial(
+        LLaVA_Next, model_path="felixnguyen33/Llava_1_5_7B_Vicuna_Pruned_Wanda"
+    ),
+    "Qwen2.5-3B-VL-Instruct-sparsegpt-50": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_sparsegpt_50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-3B-VL-Instruct-gblm-50": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_gblm_50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-3B-VL-Instruct-wanda-50": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_wanda_50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    'Gemma3-4B-GPTQ-Int4': partial(Gemma3, model_path='/home/chien/Pruning/llm-compressor/examples/multimodal_vision/gemma-3-4b-it-W4A16-G128'),
+    'Gemma3-4B-AWQ': partial(Gemma3, model_path='gaunernst/gemma-3-4b-it-int4-awq'),
+    'Gemma3-4B-GBLM-50': partial(Gemma3, model_path='/home/chien/Pruning/GBLM-Pruner/out/gemma_3_4b_it/unstructured/gblm_50'),
+    "Qwen2.5-VL-7B-Instruct-GPTQ-Int4": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/llm-compressor/examples/multimodal_vision/Qwen2.5-VL-7B-Instruct-W4A16-G128",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-7B-Instruct-GBLM-20": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_7b_instruct/unstructured/gblm_20",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+        do_sample=False,
+        temperature=0.0,
+    ),
+    "Qwen2.5-VL-7B-Instruct-GBLM-30": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_7b_instruct/unstructured/gblm_30",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+        do_sample=False,
+        temperature=0.0,
+    ),
+    "Qwen2.5-VL-7B-Instruct-GBLM-60": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_7b_instruct/unstructured/gblm_60",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+        do_sample=False,
+        temperature=0.0,
+    ),
+    "Qwen2.5-VL-7B-Instruct-GBLM-50": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/Gwen_2_5_VL_Instruct_7b_GBLM_Pruned",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+        do_sample=False,  # Force greedy decoding to avoid NaN/inf from pruned model
+        temperature=0.0,  # Disable temperature scaling
+    ),
+    "Qwen2.5-VL-7B-Instruct-Wanda-50": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/Gwen_2_5_VL_Instruct_7B_Wanda_Pruned",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-7B-Instruct-GBLM-80": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_7b_instruct/unstructured/gblm_80",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+        do_sample=False,
+        temperature=0.0,
+    ),
+    "Qwen2.5-VL-7B-Instruct-Sparsegpt-30": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_7b/unstructured/sparsegpt_30",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-7B-Instruct-Sparsegpt-60": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_7b/unstructured/sparsegpt_60",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-7B-Instruct-Sparsegpt-70": partial(
+            Qwen2VLChat,
+            model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_7b/unstructured/sparsegpt_70",
+            min_pixels=1280 * 28 * 28,
+            max_pixels=16384 * 28 * 28,
+            use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-7B-Instruct-Sparsegpt-80": partial(
+            Qwen2VLChat,
+            model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_7b/unstructured/sparsegpt_80",
+            min_pixels=1280 * 28 * 28,
+            max_pixels=16384 * 28 * 28,
+            use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-7B-Instruct-Wanda-70": partial(
+            Qwen2VLChat,
+            model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_7b/unstructured/wanda_70",
+            min_pixels=1280 * 28 * 28,
+            max_pixels=16384 * 28 * 28,
+            use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-7B-Instruct-W8A8-SmoothQuant": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/Qwen2.5-VL-7B-Instruct-W8A8-SmoothQuant",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-7B-Instruct-Wanda-80": partial(
+            Qwen2VLChat,
+            model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_7b/unstructured/wanda_80",
+            min_pixels=1280 * 28 * 28,
+            max_pixels=16384 * 28 * 28,
+            use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-3B-Instruct-wanda-50": partial(
+        Qwen2VLChat,
+        model_path="/home/chien/Pruning/GBLM-Pruner/out/qwen2_5_vl_3b_instruct/unstructured/wanda",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-3B-Instruct-sparsegpt-50": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_sparsegpt_50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-VL-3B-Instruct-gblm-50": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_gblm_50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+     "Qwen2.5-3B-VL-Instruct-AWQ": partial(
+        Qwen2VLChat,
+        model_path="Qwen/Qwen2.5-VL-3B-Instruct-AWQ",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-3B-VL-Instruct-GPTQ-Int4": partial(
+        Qwen2VLChat,
+        model_path="hfl/Qwen2.5-VL-3B-Instruct-GPTQ-Int4",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-3B-Instruct-Sparsegpt-50-pope": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_sparsegpt_50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+     "Qwen2.5-3B-Instruct-Wanda-50-pope": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_wanda_50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),
+    "Qwen2.5-3B-Instruct-GBLM-50-pope": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_gblm_50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),    
+}
 
 model_groups = [
     ungrouped, o1_apis, api_models, xtuner_series, qwen_series, llava_series, granite_vision_series,
