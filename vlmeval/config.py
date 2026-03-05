@@ -2179,27 +2179,48 @@ supported_VLM = {
         max_pixels=16384 * 28 * 28,
         use_custom_prompt=False,
     ),
-    "Qwen2.5-3B-Instruct-Sparsegpt-50-pope": partial(
+    "Qwen2.5-VL-32B-Instruct-Wanda-50": partial(
         Qwen2VLChat,
-        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_sparsegpt_50",
+        model_path="felixnguyen33/Qwen2.5-VL-32B-Instruct-Wanda-50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),  
+     "Qwen2.5-VL-32B-Instruct-GBLM-50": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/Qwen2.5-VL-32B-Instruct-GBLM-Pruner-50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),  
+      "Qwen2.5-VL-32B-Instruct-SparseGPT-50": partial(
+        Qwen2VLChat,
+        model_path="felixnguyen33/Qwen2.5-VL-32B-Instruct-SparseGPT-50",
+        min_pixels=1280 * 28 * 28,
+        max_pixels=16384 * 28 * 28,
+        use_custom_prompt=False,
+    ),  
+    "Qwen2.5-VL-32B-Instruct-AWQ": partial(
+        Qwen2VLChat,
+        model_path="Qwen/Qwen2.5-VL-32B-Instruct-AWQ",
         min_pixels=1280 * 28 * 28,
         max_pixels=16384 * 28 * 28,
         use_custom_prompt=False,
     ),
-     "Qwen2.5-3B-Instruct-Wanda-50-pope": partial(
+    "Qwen2.5-VL-32B-Instruct-W8A8-SmoothQuant": partial(
         Qwen2VLChat,
-        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_wanda_50",
+        model_path="felixnguyen33/Qwen2.5-VL-32B-Instruct-W8A8-SmoothQuant",
         min_pixels=1280 * 28 * 28,
         max_pixels=16384 * 28 * 28,
         use_custom_prompt=False,
     ),
-    "Qwen2.5-3B-Instruct-GBLM-50-pope": partial(
+    "Qwen2.5-VL-32B-Instruct-GPTQ-Int4": partial(
         Qwen2VLChat,
-        model_path="felixnguyen33/qwen2_5_vl_3b_instruct_gblm_50",
+        model_path="felixnguyen33/Qwen2.5-VL-32B-Instruct-GPTQ-Int4-W4A16-G128",
         min_pixels=1280 * 28 * 28,
         max_pixels=16384 * 28 * 28,
         use_custom_prompt=False,
-    ),    
+    )      
 }
 
 model_groups = [

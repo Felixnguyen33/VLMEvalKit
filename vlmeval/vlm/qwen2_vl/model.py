@@ -287,8 +287,10 @@ class Qwen2VLChat(Qwen2VLPromptMixin, BaseModel):
             torch.cuda.set_device(0)
             self.device = 'cuda'
         else:
+            # AWQ kernels require fp16; using 'auto' (bf16) causes a dtype mismatch in Triton
+            load_dtype = torch.float16 if 'awq' in model_path.lower() else 'auto'
             self.model = MODEL_CLS.from_pretrained(
-                model_path, torch_dtype='auto', device_map="auto", attn_implementation='flash_attention_2'
+                model_path, torch_dtype=load_dtype, device_map="auto", attn_implementation='flash_attention_2'
             )
             self.model.eval()
 
